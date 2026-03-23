@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My AI</title>
+<style>
+body {margin:0;font-family:Arial;display:flex;flex-direction:column;height:100vh;}
+#welcome {flex:1;display:flex;justify-content:center;align-items:center;font-size:30px;}
+#chat {flex:1;overflow:auto;padding:10px;}
+#input {display:flex;border-top:1px solid #ccc;}
+input {flex:1;padding:10px;}
+</style>
+</head>
+
+<body>
+
+<div id="welcome">Hello User 👋</div>
+<div id="chat"></div>
+
+<div id="input">
+<input id="msg" placeholder="Ask anything...">
+<button onclick="send()">Send</button>
+</div>
+
+<script>
+async function send(){
+    let msg=document.getElementById("msg").value;
+    document.getElementById("welcome").style.display="none";
+
+    let chat=document.getElementById("chat");
+    chat.innerHTML+="<p>You: "+msg+"</p>";
+
+    let res=await fetch("/chat",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({message:msg})
+    });
+
+    let data=await res.json();
+    chat.innerHTML+="<p>AI: "+data.reply+"</p>";
+}
+</script>
+
+</body>
+</html>
